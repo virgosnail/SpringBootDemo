@@ -1,0 +1,17 @@
+
+spring:
+
+  kafka:
+
+    bootstrap-servers: 192.168.170.34:9192
+
+    producer:
+      retries: 0
+      batch-size: 16384
+      buffer-memory: 33554432
+      client-id: 0
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+    consumer:
+      group-id: rng
