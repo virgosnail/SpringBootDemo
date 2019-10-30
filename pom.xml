@@ -8,6 +8,7 @@
         <module>kafka</module>
 		<module>swagger</module>
         <module>zookeeper</module>
+        <module>basic</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
