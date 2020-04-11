@@ -6,7 +6,6 @@
         <groupId>com.skd</groupId>
         <artifactId>SpringBootDemo</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-
     </parent>
     <groupId>com.skd</groupId>
     <artifactId>mybatis</artifactId>
