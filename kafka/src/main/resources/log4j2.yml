@@ -30,9 +30,19 @@ Configuration:
             onMismatch: DENY
       Policies:
         SizeBasedTriggeringPolicy:
-          size: 500 MB
+          size: 20 MB
       DefaultRollOverStrategy:
-        max: 200
+        max: 100
+        Delete:
+          basePath: logs/archive
+          maxDepth: 2
+          IfFileName:
+            glob: \*/running.*.log
+          IfLastModified:
+            age: 2d
+          IfAccumulatedFileSize:
+            exceeds: 100MB
+
 
   Loggers:
     AsyncRoot:
