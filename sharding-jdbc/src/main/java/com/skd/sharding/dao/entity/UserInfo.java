@@ -1,5 +1,7 @@
 package com.skd.sharding.dao.entity;
 
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
 
 /**
@@ -10,6 +12,7 @@ import lombok.Data;
 @Data
 public class UserInfo {
 
+    @TableId(type=IdType.INPUT)
     private Long userId;
     private String userName;
     private String account;

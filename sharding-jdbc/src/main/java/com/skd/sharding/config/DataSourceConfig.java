@@ -5,9 +5,18 @@ import io.shardingjdbc.core.api.ShardingDataSourceFactory;
 import io.shardingjdbc.core.api.config.ShardingRuleConfiguration;
 import io.shardingjdbc.core.api.config.TableRuleConfiguration;
 import io.shardingjdbc.core.api.config.strategy.InlineShardingStrategyConfiguration;
+import io.shardingjdbc.core.api.config.strategy.StandardShardingStrategyConfiguration;
+import io.shardingjdbc.core.jdbc.core.datasource.ShardingDataSource;
+import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -19,66 +28,80 @@ import java.util.Map;
  * @Date: 2020/4/11 16:54
  */
 @Configuration
-@ConfigurationProperties(prefix = "a")
 public class DataSourceConfig {
 
+    /**
+     * 配置分库分表策略
+     *
+     * @return
+     * @throws SQLException
+     */
+    @Bean(name = "shardingDataSource")
+    DataSource getShardingDataSource() throws SQLException {
+        ShardingRuleConfiguration shardingRuleConfig;
+        shardingRuleConfig = new ShardingRuleConfiguration();
+        shardingRuleConfig.getTableRuleConfigs().add(getUserTableRuleConfiguration());
+        shardingRuleConfig.getBindingTableGroups().add("user_info");
+        shardingRuleConfig.setDefaultDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration("user_id", DemoDatabaseShardingAlgorithm.class.getName()));
+        shardingRuleConfig.setDefaultTableShardingStrategyConfig(new StandardShardingStrategyConfiguration("user_id", DemoTableShardingAlgorithm.class.getName()));
+        return new ShardingDataSource(shardingRuleConfig.build(createDataSourceMap()));
+    }
+
+
+    /**
+     * 设置表的node
+     * @return
+     */
     @Bean
-    TableRuleConfiguration getOrderTableRuleConfiguration() {
+    TableRuleConfiguration getUserTableRuleConfiguration() {
         TableRuleConfiguration orderTableRuleConfig = new TableRuleConfiguration();
-        //配置逻辑表名，并非数据库中真实存在的表名，而是sql中使用的那个，不受分片策略而改变.
-        //例如：select * frpm t_order where user_id = xxx
-        orderTableRuleConfig.setLogicTable("t_order");
-        //配置真实的数据节点，即数据库中真实存在的节点，由数据源名 + 表名组成
-        //${} 是一个groovy表达式，[]表示枚举，{...}表示一个范围。
-        //整个inline表达式最终会是一个笛卡尔积，表示ds_0.t_order_0. ds_0.t_order_1
-        // ds_1.t_order_0. ds_1.t_order_0
-        orderTableRuleConfig.setActualDataNodes("ds_${0..1}.t_order_${0..1}");
-        //主键生成列，默认的主键生成算法是snowflake
-        orderTableRuleConfig.setKeyGeneratorColumnName("order_id");
-        //设置分片策略，这里简单起见直接取模，也可以使用自定义算法来实现分片规则
-        orderTableRuleConfig.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("order_id","t_order_${order_id % 2}"));
+        orderTableRuleConfig.setLogicTable("user_info");
+        orderTableRuleConfig.setActualDataNodes("user_${0..1}.user_info_${0..1}");
+        orderTableRuleConfig.setKeyGeneratorColumnName("user_id");
         return orderTableRuleConfig;
     }
 
+
+    /**
+     * 需要手动配置事务管理器
+     *
+     * @param shardingDataSource
+     * @return
+     */
     @Bean
-    TableRuleConfiguration getOrderItemTableRuleConfiguration() {
-        TableRuleConfiguration orderItemTableRuleConfig = new TableRuleConfiguration();
-        orderItemTableRuleConfig.setLogicTable("t_order_item");
-        orderItemTableRuleConfig.setActualDataNodes("ds_${0..1}.t_order_item_${0..1}");
-        orderItemTableRuleConfig.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("order_item_id","t_order_item_${order_id % 2}"));
-        return orderItemTableRuleConfig;
+    public DataSourceTransactionManager transactitonManager(DataSource shardingDataSource) {
+        return new DataSourceTransactionManager(shardingDataSource);
+    }
+
+    @Bean
+    @Primary
+    public SqlSessionFactory sqlSessionFactory(DataSource shardingDataSource) throws Exception {
+        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+        bean.setDataSource(shardingDataSource);
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
+        return bean.getObject();
+    }
+
+    @Bean
+    @Primary
+    public SqlSessionTemplate testSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
+        return new SqlSessionTemplate(sqlSessionFactory);
     }
 
     private Map<String, DataSource> createDataSourceMap() {
-        Map<String, DataSource> result = new HashMap<>(2, 1);
-        result.put("ds_0", createDataSource("ds_0"));
-        result.put("ds_1", createDataSource("ds_1"));
+        Map<String, DataSource> result = new HashMap<>();
+        result.put("user_0", createDataSource("user_0"));
+        result.put("user_1", createDataSource("user_1"));
         return result;
     }
 
     private DataSource createDataSource(final String dataSourceName) {
-        DruidDataSource result = new DruidDataSource();
-        result.setInitialSize(10);
-        result.setMinIdle(10);
-        result.setMaxActive(50);
-        result.setDriverClassName(com.mysql.jdbc.Driver.class.getName());
-        result.setUrl(String.format("jdbc:mysql://localhost:3306/%s?useSSL=false", dataSourceName));
+        BasicDataSource result = new BasicDataSource();
+        result.setDriverClassName(com.mysql.cj.jdbc.Driver.class.getName());
+        String param = "?serverTimezone=GMT8%2B8&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true";
+        result.setUrl(String.format("jdbc:mysql://localhost:3306/%s", dataSourceName));
         result.setUsername("root");
-        result.setPassword("");
+        result.setPassword("123456");
         return result;
-    }
-
-    @Bean
-    DataSource getShardingDataSource() throws SQLException {
-        ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
-        shardingRuleConfig.getTableRuleConfigs().add(getOrderTableRuleConfiguration());
-        shardingRuleConfig.getTableRuleConfigs().add(getOrderItemTableRuleConfiguration());
-        shardingRuleConfig.getBindingTableGroups().add("t_order, t_order_item");
-        shardingRuleConfig.setDefaultDatabaseShardingStrategyConfig(
-                new InlineShardingStrategyConfiguration("user_id", "ds_${user_id % 2}"));
-        shardingRuleConfig.setDefaultTableShardingStrategyConfig(
-                new InlineShardingStrategyConfiguration("order_id", "t_order_${order_id % 2}"));
-        return ShardingDataSourceFactory.createDataSource(createDataSourceMap(),
-                shardingRuleConfig, new HashMap<>(), null);
     }
 }
