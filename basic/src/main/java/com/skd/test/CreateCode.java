@@ -1,4 +1,4 @@
-package com.skd.thread;
+package com.skd.test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -6,16 +6,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @Describe:
- * @Author: chenfan
- * @Date: 2020/4/9 16:35
+ * @Description:
+ * @Author: virgosnail
+ * @Date: 2020/4/12 19:48
  */
-public class Test {
+public class CreateCode {
 
     public static void main (String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader("E:\\project\\SpringBootDemo\\basic\\src\\main\\resource\\key.txt"));
         String temp = "";
-        Set<String>  set = new HashSet();
+        Set<String> set = new HashSet();
         try {
             while(true){
                 String s = br.readLine();
