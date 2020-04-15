@@ -1,6 +1,6 @@
-package com.skd.swagger.config;
+package com.skd.melody.config;
 
-import com.skd.swagger.SwaggerApplication;
+import com.skd.melody.JavamelodyApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -26,7 +26,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(SwaggerApplication.class.getPackage().getName()))
+                .apis(RequestHandlerSelectors.basePackage(JavamelodyApplication.class.getPackage().getName()))
                 .paths(PathSelectors.any())
                 .build();
     }

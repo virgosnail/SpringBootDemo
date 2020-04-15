@@ -14,7 +14,7 @@ import java.util.Date;
  * @Date: 2019/4/10 12:33
  */
 @Data
-@TableName(value = "djms.employee")
+@TableName(value = "employee")
 public class Employee {
 
     @TableId(type = IdType.AUTO)

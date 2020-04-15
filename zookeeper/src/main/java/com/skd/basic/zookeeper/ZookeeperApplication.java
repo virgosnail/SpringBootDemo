@@ -1,14 +1,13 @@
-package com.skd.swagger;
+package com.skd.basic.zookeeper;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SwaggerApplication {
+public class ZookeeperApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SwaggerApplication.class, args);
-        System.out.println("start swagger success");
+        SpringApplication.run(ZookeeperApplication.class, args);
     }
 
 }
