@@ -1,4 +1,4 @@
-package com.skd.basic.kafka.demo;
+package com.skd.kafka.demo;
 
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.beans.factory.annotation.Autowired;

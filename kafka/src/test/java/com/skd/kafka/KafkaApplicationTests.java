@@ -1,4 +1,4 @@
-package com.skd.basic.kafka;
+package com.skd.kafka;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

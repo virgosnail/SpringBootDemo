@@ -1,6 +1,6 @@
-package com.skd.basic.kafka;
+package com.skd.kafka;
 
-import com.skd.basic.kafka.demo.Producer;
+import com.skd.kafka.demo.Producer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;

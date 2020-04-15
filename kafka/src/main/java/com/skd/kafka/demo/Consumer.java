@@ -1,4 +1,4 @@
-package com.skd.basic.kafka.demo;
+package com.skd.kafka.demo;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;

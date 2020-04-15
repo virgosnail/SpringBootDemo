@@ -1,4 +1,4 @@
-package com.skd.basic.zookeeper;
+package com.skd.zookeeper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

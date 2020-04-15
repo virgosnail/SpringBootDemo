@@ -1,4 +1,4 @@
-package com.skd.basic.zookeeper.util;
+package com.skd.zookeeper.util;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
