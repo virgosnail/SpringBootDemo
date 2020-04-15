@@ -4,4 +4,6 @@ server:
 
 javamelody:
   enabled: true
+  init-parameters:
+    log: true
 

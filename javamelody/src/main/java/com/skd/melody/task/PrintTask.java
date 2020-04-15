@@ -17,6 +17,10 @@ public class PrintTask implements Runnable {
 
     private Boolean flag = true;
 
+    /**
+     * HTTP请求调用链中的 controller 和 service 可以自动监控
+     * 其他的 bean 需要配置  @MonitoredWithSpring 才可以进行监控
+     */
     @MonitoredWithSpring
     @Override
     public void run() {
