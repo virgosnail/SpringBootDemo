@@ -11,16 +11,15 @@ public class Client {
 
         /**
          *  客户端决定什么场景下用什么策略
-         *  不同的策略
-         *  执行者根据不同的策略产生不同的行为
+         *  执行者根据不同的策略执行不同的行为，完成相同的工作
          */
         Strategy strategy = new Rich();
         Context context = new Context(strategy);
-        context.execute();
+        context.run();
 
         strategy = new Poor();
         context = new Context(strategy);
-        context.execute();
+        context.run();
 
     }
 }

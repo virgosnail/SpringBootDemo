@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * @Describe: 执行者
+ * @Describe: 执行者，组合了一个策略对象
  * @Author: chenfan
  * @Date: 2020/4/16 20:08
  */
@@ -14,7 +14,7 @@ public class Context {
 
     private Strategy strategy;
 
-    public void execute(){
+    public void run(){
         strategy.execute();
     }
 }

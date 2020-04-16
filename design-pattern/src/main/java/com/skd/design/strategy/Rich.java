@@ -9,6 +9,6 @@ public class Rich implements Strategy {
 
     @Override
     public void execute() {
-        System.out.println("大口吃肉，大口喝酒");
+        System.out.println("有钱的日子，大口吃肉，大口喝酒");
     }
 }

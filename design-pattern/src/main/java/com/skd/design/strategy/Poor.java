@@ -9,6 +9,6 @@ public class Poor implements Strategy {
 
     @Override
     public void execute() {
-        System.out.println("一碗泡面");
+        System.out.println("没钱的日子，来一碗泡面");
     }
 }
