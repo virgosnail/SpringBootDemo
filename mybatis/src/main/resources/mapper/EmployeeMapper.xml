@@ -19,5 +19,4 @@
     id, name, sex, age, salary, comment, create_at,update_at, is_deleted
   </sql>
 
-
 </mapper>

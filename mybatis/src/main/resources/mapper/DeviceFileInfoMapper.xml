@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace的值一般为mapper所在的包路径-->
+<mapper namespace="com.skd.mybatis.dao.mapper.DeviceFileInfoMapper">
+
+  <resultMap id="BaseResultMap" type="com.skd.mybatis.dao.entity.DeviceFileInfo">
+    <id column="file_id" jdbcType="BIGINT" property="fileId" />
+    <result column="file_type" jdbcType="INTEGER" property="fileType" />
+    <result column="file_size" jdbcType="BIGINT" property="fileSize" />
+    <result column="file_name" jdbcType="BIGINT" property="fileName" />
+    <result column="file_path" jdbcType="VARCHAR" property="filePath" />
+    <result column="file_ext" jdbcType="VARCHAR" property="fileExt" />
+    <result column="ex_info" jdbcType="VARCHAR" property="exInfo" />
+    <result column="finished" jdbcType="TINYINT" property="finished" />
+    <result column="dev_id" jdbcType="VARCHAR" property="devId" />
+    <result column="chl" jdbcType="INTEGER" property="chl" />
+    <result column="stream_type" jdbcType="INTEGER" property="streamType" />
+    <result column="start_time" jdbcType="DATE" property="startTime" />
+    <result column="end_time" jdbcType="DATE" property="endTime" />
+    <result column="source_type" jdbcType="INTEGER" property="sourceType" />
+    <result column="create_at" jdbcType="DATE" property="createAt" />
+    <result column="update_at" jdbcType="DATE" property="updateAt" />
+    <result column="take_at" jdbcType="DATE" property="takeAt" />
+    <result column="valid" jdbcType="TINYINT" property="valid" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    file_type, file_size, file_name, file_path, file_ext, ex_info, finished, dev_id, chl, stream_type,
+    start_time, end_time,source_type, create_at, update_at, take_at, valid
+  </sql>
+
+  <insert id="batchInsert">
+    insert into device_file_info (<include refid="Base_Column_List"></include>)
+    values
+    <foreach collection="list" item="item" separator=",">
+    (
+      #{item.fileType},
+      #{item.fileSize},
+      #{item.fileName},
+      #{item.filePath},
+      #{item.fileExt},
+      #{item.exInfo},
+      #{item.finished},
+      #{item.devId},
+      #{item.chl},
+      #{item.streamType},
+      #{item.startTime},
+      #{item.endTime},
+      #{item.sourceType},
+      #{item.createAt},
+      #{item.updateAt},
+      #{item.takeAt},
+      #{item.valid})
+    </foreach>
+  </insert>
+
+</mapper>
