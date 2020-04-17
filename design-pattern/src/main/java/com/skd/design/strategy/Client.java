@@ -1,7 +1,7 @@
 package com.skd.design.strategy;
 
 /**
- * @Describe: 客户端
+ * @Describe: 客户端，策略模式
  * @Author: chenfan
  * @Date: 2020/4/16 20:11
  */

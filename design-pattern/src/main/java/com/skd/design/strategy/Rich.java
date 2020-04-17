@@ -1,7 +1,7 @@
 package com.skd.design.strategy;
 
 /**
- * @Describe: 有钱的时候
+ * @Describe: 有钱时候的策略
  * @Author: chenfan
  * @Date: 2020/4/16 20:06
  */
