@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>javamelody</module>
+        <module>design-pattern</module>
         <module>mybatis</module>
         <module>kafka</module>
 		<module>swagger</module>
