@@ -10,18 +10,28 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @Describe:
+ * 需要在META-INF/spring.factories中配置该类的完全限定名
+ * @Describe: 自动配置类
  * @Author: chenfan
  * @Date: 2020/4/18 14:56
  */
 @Configuration
+/**
+ * 当classpath下发现WrapService类时进行自动配置
+ */
 @ConditionalOnClass(WrapService.class)
 @EnableConfigurationProperties(PropertiesConfig.class)
 public class WrapAutoConfig {
 
 
     @Bean
+    /**
+     * 当Spring Context中不存在该bean时创建bean
+     */
     @ConditionalOnMissingBean
+    /**
+     * 当配置文件中 skd.wrap.enabled = true 时创建Bean
+     * */
     @ConditionalOnProperty(prefix = "skd.wrap",value = "enabled",havingValue = "true")
     public WrapService wrapService(){
         return new WrapServiceImpl();
