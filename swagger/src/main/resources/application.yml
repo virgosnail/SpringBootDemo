@@ -1,3 +1,9 @@
 
 server:
   port: 8888
+
+skd:
+  wrap:
+    enabled: true
+    prefix: aaa
+    suffix: bbb
