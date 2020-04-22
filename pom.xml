@@ -9,9 +9,9 @@
         <module>mybatis</module>
         <module>kafka</module>
 		<module>swagger</module>
-        <module>zookeeper</module>
         <module>basic</module>
         <module>sharding-jdbc</module>
+        <module>netty</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
