@@ -1,13 +1,16 @@
 package com.skd.mybatis.controller;
 
 import com.skd.mybatis.dao.entity.DeviceFileInfo;
+import com.skd.mybatis.dao.entity.DriverInfo;
 import com.skd.mybatis.dao.entity.Employee;
 import com.skd.mybatis.dao.mapper.DeviceFileInfoMapper;
+import com.skd.mybatis.dao.repository.DriverInfoDao;
 import com.skd.mybatis.model.response.InsertResult;
 import com.skd.mybatis.service.EmployeeService;
 import com.skd.mybatis.util.DateFormatUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,7 +58,7 @@ public class TestController {
         service.deleteEmployee(employee1.getId());
     }
 
-    @PostMapping
+    @PostMapping("insertBatch")
     public InsertResult insertBatch(Integer num){
         long millis = System.currentTimeMillis();
         List<DeviceFileInfo> list = new ArrayList<>(num);
@@ -92,5 +95,13 @@ public class TestController {
         long endMillis = System.currentTimeMillis();
         InsertResult result = InsertResult.builder().insert(insert).costTime(endMillis - millis).build();
         return result;
+    }
+
+    @Autowired
+    private DriverInfoDao driverInfoDao;
+
+    @GetMapping("getDriverInfo")
+    public DriverInfo getDriverInfo(Integer id){
+        return driverInfoDao.getDriverInfoById(id);
     }
 }

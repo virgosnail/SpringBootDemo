@@ -3,7 +3,6 @@ server:
 
 spring:
 
-#datasource
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
 
@@ -27,11 +26,18 @@ spring:
       time-between-eviction-runs-millis: 60000
       max-pool-prepared-statement-per-connection-size: 20
 
-#mybatis
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml
+  configuration:
+    # 自动将数据库字段以驼峰形式映射到实体类
+    map-underscore-to-camel-case: true
+  # 全局配置
   global-config:
+    # 逻辑删除的默认值
     logic-delete-value: 1
+    # 逻辑存在的默认值
     logic-not-delete-value: 0
+    # 逻辑删除注入器
     sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+
 
