@@ -1,6 +1,6 @@
 package com.skd.netty.controller;
 
-import com.skd.netty.manager.MegManager;
+import com.skd.netty.manager.MsgManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @Autowired
-    private MegManager manager;
+    private MsgManager manager;
 
     @GetMapping
     @RequestMapping("send")

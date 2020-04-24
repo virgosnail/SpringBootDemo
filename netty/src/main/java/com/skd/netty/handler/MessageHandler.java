@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
  * @Date: 2020/4/21 15:10
  */
 @Slf4j
-@ChannelHandler.Sharable
 @Component
 public class MessageHandler extends ChannelInboundHandlerAdapter {
 

@@ -5,6 +5,7 @@ import com.skd.netty.codec.Encoder;
 import com.skd.netty.handler.MessageHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -17,10 +18,10 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.ResourceLeakDetector;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
-import java.nio.charset.Charset;
 
 
 /**
@@ -30,13 +31,20 @@ import java.nio.charset.Charset;
  */
 @Slf4j
 @Component
-public class MegManager {
+public class MsgManager {
+
+    @Autowired
+    private Decoder decoder;
+
+    @Autowired
+    private Encoder encoder;
+
+    @Autowired
+    private MessageHandler messageHandler;
 
     private Bootstrap bootstrap;
 
     private Channel channel;
-
-    private Charset charset = Charset.forName("UTF-8");
 
     private Integer port = 8888;
 
@@ -56,11 +64,11 @@ public class MegManager {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, Unpooled.copiedBuffer("$".getBytes())));
-                        ch.pipeline().addLast("decoder", new Decoder());
-                        ch.pipeline().addLast("encoder", new Encoder());
+                        ch.pipeline().addLast("decoder", decoder);
+                        ch.pipeline().addLast("encoder", encoder);
                         ch.pipeline().addLast("timer", new IdleStateHandler(
                                 3000, 3000, 3000));
-                        ch.pipeline().addLast(new MessageHandler());
+                        ch.pipeline().addLast(messageHandler);
                     }
                 });
         /**DISABLED 完全关闭内存泄露检测、SIMPLE 以1%的抽样率检测是否泄露，默认级别、ADVANCED 抽样率同SIMPLE，但显示详细的泄露报告、PARANOID 抽样率为100%，显示报告信息同ADVANCED*/
@@ -105,7 +113,13 @@ public class MegManager {
     public void send(String data){
         try {
             System.out.println("data:"+ data);
-            channel.writeAndFlush(Unpooled.copiedBuffer(data.getBytes("UTF-8")));
+            ByteBuf byteBuf = Unpooled.copiedBuffer(data.getBytes("UTF-8"));
+
+            channel.writeAndFlush(byteBuf).addListener(future->{
+                if (future.isDone()){
+                    log.info("async execute result:{}",future.isSuccess());
+                }
+            });
         } catch (Exception e) {
            log.error("channel writeAndFlush error",e);
         }

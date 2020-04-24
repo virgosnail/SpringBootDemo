@@ -18,8 +18,6 @@ public class MybatisApplication {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(MybatisApplication.class, args);
-        TestController controller = context.getBean(TestController.class);
-        controller.test();
     }
 
 }
