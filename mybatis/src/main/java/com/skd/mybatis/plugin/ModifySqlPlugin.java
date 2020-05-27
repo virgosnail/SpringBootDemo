@@ -32,6 +32,7 @@ public class ModifySqlPlugin implements Interceptor {
     public Object intercept(Invocation invocation) throws Throwable {
         StatementHandler statementHandler = (StatementHandler)invocation.getTarget();
         MetaObject metaObject = MetaObject.forObject(statementHandler, new DefaultObjectFactory(), new DefaultObjectWrapperFactory(), new DefaultReflectorFactory());
+        // 分页参数信息
         RowBounds rowBounds = (RowBounds) metaObject.getValue("delegate.rowBounds");
         metaObject.setValue("delegate.rowBounds",rowBounds);
         // 获取预编译SQL
